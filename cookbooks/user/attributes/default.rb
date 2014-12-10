@@ -1,0 +1,7 @@
+default[:user][:name]  = "app"
+default[:user][:password] = "$1$JJsvHslV$szsCjVEroftprNn4JHtDi."
+default[:user][:login_shell] = "/bin/bash"
+default[:user][:description] = "Adding user.."
+default[:user][:username] = "app"
+default[:user][:home] = "/home/app"
+default[:user][:authorized_keys] = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5njJW9BvU+fXPa9wdglUgn/tm5FfCAX9l+oJXSq+ABRxm32yTnigIQYhFyFSPUdVLqYQhz3hOQN0g2X2tmFKuDpF6gNk39SVxl9IQlPwpLwbT/WefP/ISG2su72UYmvSeF9DcKNLaMAMYiJgftolu86wQ2lokXmI6IGmWatniTiokeHCjUHI0Bt46KXeHEh9NWeifwnmUtpXyxKV+Dv3lXNHbpLKLftGf42TraF6Zs0waaGuY+b0jNmQPL6qQFwtzrH5kuGUI5NHpHs/wuz5hrydnF2LIWD6ChXj63/PcrzBc22BE6XsrjCLWML91nTKaIODLaPSemcqQ5Vd8Kj4B sshar43@L-IDC21EDRVG-M.local"
