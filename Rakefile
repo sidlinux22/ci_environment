@@ -1,15 +1,27 @@
 #!/usr/bin/env rake
 
-require 'foodcritic'
-require 'rspec/core/rake_task'
+desc "Runs foodcritic linter"
+task :foodcritic do
+  if Gem::Version.new("1.9.2") <= Gem::Version.new(RUBY_VERSION.dup)
+    sandbox = File.join(File.dirname(__FILE__), %w{tmp foodcritic cookbook})
+    prepare_foodcritic_sandbox(sandbox)
 
-task :default => [:foodcritic, :spec]
-
-FoodCritic::Rake::LintTask.new do |t|
-  t.files = [ 'cookbook' ]
-  t.options = {
-    :tags => %w( ~readme ~FC001 ~FC002 ~FC003 ~FC004 ~FC005 ~FC007 ~FC015 ~FC016 ~FC017 ~FC019 ~FC022 ~FC023 ~FC024 ~FC043 ~FC047 ~FC048 )
-  }
+    sh "foodcritic --epic-fail any #{File.dirname(sandbox)}"
+  else
+    puts "WARN: foodcritic run is skipped as Ruby #{RUBY_VERSION} is < 1.9.2."
+  end
 end
 
-RSpec::Core::RakeTask.new
+task :default => 'foodcritic'
+
+private
+
+def prepare_foodcritic_sandbox(sandbox)
+  files = %w{*.md *.rb attributes definitions files libraries providers
+recipes resources templates}
+
+  rm_rf sandbox
+  mkdir_p sandbox
+  cp_r Dir.glob("{#{files.join(',')}}"), sandbox
+  puts "\n\n"
+end

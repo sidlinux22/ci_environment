@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.omnibus.chef_version = :latest
  # config.omnibus.chef_version = "10.16.6"
   config.vm.hostname = "TOdo-app"
-  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 3030, host: 3000
   config.vm.network :private_network, ip: "192.168.33.11"
   config.vm.provision :chef_solo do |chef|
   chef.cookbooks_path = "cookbooks"
