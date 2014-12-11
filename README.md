@@ -41,8 +41,8 @@ rpm -ivh vagrant_1.2.2_x86_64.rpm
 </pre>
 
 3. Creating a Vagrant VM in the project directory with :
-  vagrant box add TOdo-app
-  vagrant init
+ <pre> vagrant box add TOdo-app
+  vagrant init </pre>
 
 4. Configure vagrant file 
 
@@ -68,5 +68,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 end
 end
 </pre>
+
+5. Initializing Chef-solo
+
+<pre> mkdir todo_app </pre>
+<pre> cd todo_app</pre>
+* Install Librarian-Chef
+<pre> gem install librarian-chef </pre>
+<pre> librarian-chef init </pre>
+
+* Specifying all  dependencies in Cheffile 
+<pre>
+L-IDC1X4DKQ2-M:todo_app sshar43$ cat Cheffile | egrep -v "(^#.*|^$)"
+site 'https://supermarket.getchef.com/api/v1'
+cookbook 'application_ruby'
+cookbook 'ruby_build'
+</pre>
+* Pull  community cookbooks with Librarian
+<pre> librarian-chef install </pre>
+
+* Community cookbooks used
+
+application  
+https://github.com/poise/application
+
+application_ruby
+https://github.com/poise/application_ruby
 
 
