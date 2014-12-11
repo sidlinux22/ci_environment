@@ -46,8 +46,7 @@ rpm -ivh vagrant_1.2.2_x86_64.rpm
 
 4. Configure vagrant file 
 
-<pre>
-
+```
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -67,8 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   chef.provisioning_path = "/home/vagrant/"
 end
 end
-</pre>
-
+```
 ## Initializing Chef-solo
 
 <pre> mkdir todo_app </pre>
@@ -87,17 +85,16 @@ cookbook 'ruby_build'
 * Pull  community cookbooks with Librarian
 <pre> librarian-chef install </pre>
 
-* Community cookbooks used
-application  
-https://github.com/poise/application
-application_ruby
-https://github.com/poise/application_ruby
+* Community cookbooks used:
+1) application [https://github.com/poise/application]
+2) application_ruby[https://github.com/poise/application_ruby]
+
 
 ### Create  USER cookbook 
 Create/Configue the user cookbook to create a new user that will run deploy artifact and run application
 <pre> knife cookbook create user </pre>
 Setting user attribute 
-<pre>
+```
 L-IDC1X4DKQ2-M:user sshar43$ cat attributes/default.rb
 default[:use][:name]  = "app"
 default[:user][:password] = "$1$JJsvHslV$szsCjVEroftprNn4JHtDi."
@@ -106,12 +103,11 @@ default[:user][:description] = "Adding user.."
 default[:user][:username] = "app"
 default[:user][:home] = "/home/app"
 default[:user][:authorized_keys] = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5njJW9BvU+fXPa9wdglUgn/tm5FfCAX9l+oJXSq+ABRxm32yTnigIQYhFyFSPUdVLqYQhz3hOQN0g2X2tmFKuDpF6gNk39SVxl9IQlPwpLwbT/WefP/ISG2su72UYmvSeF9DcKNLaMAMYiJgftolu86wQ2lokXmI6IGmWatniTiokeHCjUHI0Bt46KXeHEh9NWeifwnmUtpXyxKV+Dv3lXNHbpLKLftGf42TraF6Zs0waaGuY+b0jNmQPL6qQFwtzrH5kuGUI5NHpHs/wuz5hrydnF2LIWD6ChXj63/PcrzBc22BE6XsrjCLWML91nTKaIODLaPSemcqQ5Vd8Kj4B sshar43@L-IDC21EDRVG-M.local"
-</pre>
-
+```
 * Create recipe to add user with set attribute
 
-<pre>
--IDC1X4DKQ2-M:user sshar43$ cat recipes/default.rb  | egrep -v "(^#.*|^$)"
+```
+IDC1X4DKQ2-M:user sshar43$ cat recipes/default.rb  | egrep -v "(^#.*|^$)"
 user node[:user][:name] do
   comment "#{node[:user][:name]} User"
   home "/home/#{node[:user][:name]}"
@@ -145,8 +141,7 @@ file "#{node[:user][:home]}/.ssh/authorized_keys" do
   mode 0600
   content node[:user][:authorized_keys]
 end
-</pre>
-
+```
 
 ### Create new cookbook  "todo_app" to deploy Ruby web applications
 
@@ -154,7 +149,7 @@ we define our application using application resource provided by application coo
 <pre> knife cookbook create todo_app </pre>
 * Recipe to build/deploy app
 
-<pre>
+```
 L-IDC1X4DKQ2-M:cookbooks sshar43$ cat  todo_app/recipes/default.rb | egrep -v "(^#.*|^$)"
   include_recipe 'ruby_build'
   ruby_build_ruby '1.9.3-p362' do
@@ -183,10 +178,10 @@ L-IDC1X4DKQ2-M:cookbooks sshar43$ cat  todo_app/recipes/default.rb | egrep -v "(
       worker_processes 2
     end
   end
-  </pre>
-  
+```  
 
-* Cookbook depends on
+
+* Cookbook depends on:
 
 <pre>
 depends 'application'
