@@ -93,9 +93,9 @@ https://github.com/poise/application
 application_ruby
 https://github.com/poise/application_ruby
 
-* Create  user cookbook 
+### Create  USER cookbook 
+Create/Configue the user cookbook to create a new user that will run deploy artifact and run application
 <pre> knife cookbook create user </pre>
-Configue the user cookbook to create a new user that will run deploy artifact and run application
 Setting user attribute 
 <pre>
 L-IDC1X4DKQ2-M:user sshar43$ cat attributes/default.rb
@@ -108,7 +108,8 @@ default[:user][:home] = "/home/app"
 default[:user][:authorized_keys] = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5njJW9BvU+fXPa9wdglUgn/tm5FfCAX9l+oJXSq+ABRxm32yTnigIQYhFyFSPUdVLqYQhz3hOQN0g2X2tmFKuDpF6gNk39SVxl9IQlPwpLwbT/WefP/ISG2su72UYmvSeF9DcKNLaMAMYiJgftolu86wQ2lokXmI6IGmWatniTiokeHCjUHI0Bt46KXeHEh9NWeifwnmUtpXyxKV+Dv3lXNHbpLKLftGf42TraF6Zs0waaGuY+b0jNmQPL6qQFwtzrH5kuGUI5NHpHs/wuz5hrydnF2LIWD6ChXj63/PcrzBc22BE6XsrjCLWML91nTKaIODLaPSemcqQ5Vd8Kj4B sshar43@L-IDC21EDRVG-M.local"
 </pre>
 
-Creating recipe to add user with set attribute 
+* Create recipe to add user with set attribute
+
 <pre>
 -IDC1X4DKQ2-M:user sshar43$ cat recipes/default.rb  | egrep -v "(^#.*|^$)"
 user node[:user][:name] do
@@ -147,7 +148,52 @@ end
 </pre>
 
 
+### Create new cookbook  "todo_app" to deploy Ruby web applications
 
-#### Deployment Plan
+we define our application using application resource provided by application cookbook
+<pre> knife cookbook create todo_app </pre>
+* Recipe to build/deploy app
 
-Step : 
+<pre>
+L-IDC1X4DKQ2-M:cookbooks sshar43$ cat  todo_app/recipes/default.rb | egrep -v "(^#.*|^$)"
+  include_recipe 'ruby_build'
+  ruby_build_ruby '1.9.3-p362' do
+    prefix_path '/usr/local/'
+    environment 'CFLAGS' => '-g -O2'
+    action :install
+  end
+  gem_package 'bundler' do
+    version '1.2.3'
+    gem_binary '/usr/local/bin/gem'
+    options '--no-ri --no-rdoc'
+  end
+  application 'todo_app' do
+    owner 'app'
+    group 'app'
+    path '/home/app'
+    revision 'v0.1'
+    action :force_deploy
+    environment 'RAILS_ENV' => 'development'
+    repository 'git://github.com/sidlinux22/ToDoAPP.git'
+    rails do
+      bundle install
+      bundler true
+    end
+    unicorn do
+      worker_processes 2
+    end
+  end
+  </pre>
+  
+
+* Cookbook depends on
+
+<pre>
+depends 'application'
+depends 'runit'
+depends 'ruby_build'
+depends 'user'
+depends 'application_ruby'
+</pre>
+
+
