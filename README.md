@@ -2,7 +2,7 @@ ci_environment
 ==============
 [![Build Status](https://travis-ci.org/sidlinux22/ci_environment.svg?branch=master)](https://travis-ci.org/sidlinux22/ci_environment)
 
-#### Deploy a Rails Application with Chef-Solo
+#### Deploy  Rails Application with Chef-Solo
 
 #### Design:
 ![alt tag](https://github.com/sidlinux22/ToDoAPP/blob/master/log/ci-arc.png)
@@ -190,5 +190,54 @@ depends 'ruby_build'
 depends 'user'
 depends 'application_ruby'
 </pre>
+
+
+#### ROLE
+```
+L-IDC1X4DKQ2-M:todo_app sshar43$ cat roles/todo_app.rb
+name "todo_app"
+run_list(
+   "recipe[user]",
+   "recipe[todo_app::default]"
+)
+```
+
+
+#### Deployment to Vagrant VM
+
+* git clone https://github.com/sidlinux22/ci_environment.git
+* Start VM by running
+ <pre> vagrant up </pre>
+When this command is  finised we will have a VM with TOdo app deployed on it.
+
+#### Deployment on local machine using Chef Solo
+* create a Chef configuration file
+```
+root = File.expand_path(File.dirname(__FILE__))
+
+file_cache_path    "/var/chef/cache"
+file_backup_path   "/var/chef/backup"
+cookbook_path root + '/cookbooks'
+if Chef::VERSION.to_f < 11.8
+  role_path root + '/roles'
+else
+  role_path root + '/roles'
+end
+log_level :debug
+verbose_logging    false
+
+encrypted_data_bag_secret nil
+```
+* JSON config
+```
+node.json
+{
+  "run_list": [
+    "role[todo_app]"
+  ]
+}
+```
+<pre> git clone https://github.com/sidlinux22/ci_environment.git </pre>
+<pre>sudo chef-solo -j node.json -c solo.rb </pre>
 
 
