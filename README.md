@@ -241,3 +241,18 @@ node.json
 <pre>sudo chef-solo -j node.json -c solo.rb </pre>
 
 
+### Continuous Integration
+travis-ci
+
+```
+ci_environment]$ cat .travis.yml
+script: "gem install foodcritic -v 1.1.0 && foodcritic -f any ."
+rvm:
+  - 1.9.3
+  ```
+ #### Status Code 
+  
+  ci_environment :[![Build Status](https://travis-ci.org/sidlinux22/ci_environment.svg?branch=master)](https://travis-ci.org/sidlinux22/ci_environment)
+  
+  TOdo app [![Build Status](https://travis-ci.org/sidlinux22/ci_environment.svg?branch=master)](https://travis-ci.org/sidlinux22/ToDoAPP)
+  
